@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon.png?v=7.4.2">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="baidu-site-verification" content="CdzcA78E2w">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: true,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":true,"style":"mac"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: true,
+    lazyload: true,
+    pangu: true,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.json',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="安装虚拟机WindowsVirtualBox、 Vagrant Manjaro123$ uname -r # 查看内核版本$ yay -S virtualbox # 安装相应内核版本$ yay -S vagrant  安装完重启。 安装 Homestead1$ vagrant box add laravel&#x2F;homestead	# 执行命令 查看下载链接 使用下载工具下载  编写 metadata">
+<meta name="keywords" content="池水,chishui">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Laravel Homestead 开发环境搭建">
+<meta property="og:url" content="https:&#x2F;&#x2F;www.waixiwai.com&#x2F;laravel&#x2F;homestead&#x2F;index.html">
+<meta property="og:site_name" content="风铃呀轻响">
+<meta property="og:description" content="安装虚拟机WindowsVirtualBox、 Vagrant Manjaro123$ uname -r # 查看内核版本$ yay -S virtualbox # 安装相应内核版本$ yay -S vagrant  安装完重启。 安装 Homestead1$ vagrant box add laravel&#x2F;homestead	# 执行命令 查看下载链接 使用下载工具下载  编写 metadata">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-11-19T01:28:32.747Z">
+<meta name="twitter:card" content="summary">
+  <link rel="canonical" href="https://www.waixiwai.com/laravel/homestead/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Laravel Homestead 开发环境搭建 | 风铃呀轻响</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?8cd55c6e8de01d5da6e4090022ce2590";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">风铃呀轻响</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">鸟儿轻唱，远处谁在和。</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+        
+        
+        <li class="menu-item menu-item-home">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+      
+    
+      
+      
+        
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+      
+      
+        
+      
+        
+          
+        
+      
+        
+      
+    
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">18</span></a>
+
+  </li>
+      
+    
+      
+      
+        
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+      
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">77</span></a>
+
+  </li>
+      
+    
+      
+      
+        
+        
+        <li class="menu-item menu-item-收藏夹">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/favorites/" rel="section"><i class="fa fa-fw fa-bookmark"></i>收藏夹</a>
+
+  </li>
+      
+    
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger">
+          <i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+    
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.waixiwai.com/laravel/homestead/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="池水">
+      <meta itemprop="description" content="『希望收藏夹不要再吃灰』">
+      <meta itemprop="image" content="/static/waixiwai_avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="风铃呀轻响">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            Laravel Homestead 开发环境搭建
+            
+
+          
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2017-12-25 22:45:56" itemprop="dateCreated datePublished" datetime="2017-12-25T22:45:56+08:00">2017-12-25</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-19 09:28:32" itemprop="dateModified" datetime="2019-11-19T09:28:32+08:00">2019-11-19</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Laravel/" itemprop="url" rel="index">
+                    <span itemprop="name">Laravel</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+          
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">本文字数：</span>
+              
+              <span>3.2k</span>
+            </span>
+          
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              
+              <span>3 分钟</span>
+            </span>
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="安装虚拟机"><a href="#安装虚拟机" class="headerlink" title="安装虚拟机"></a>安装虚拟机</h2><h3 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a>Windows</h3><p><span class="exturl" data-url="aHR0cHM6Ly93d3cudmlydHVhbGJveC5vcmcvd2lraS9Eb3dubG9hZHM=" title="https://www.virtualbox.org/wiki/Downloads">VirtualBox<i class="fa fa-external-link"></i></span>、 <span class="exturl" data-url="aHR0cHM6Ly93d3cudmFncmFudHVwLmNvbS9kb3dubG9hZHMuaHRtbA==" title="https://www.vagrantup.com/downloads.html">Vagrant<i class="fa fa-external-link"></i></span></p>
+<h3 id="Manjaro"><a href="#Manjaro" class="headerlink" title="Manjaro"></a>Manjaro</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ uname -r <span class="comment"># 查看内核版本</span></span><br><span class="line">$ yay -S virtualbox <span class="comment"># 安装相应内核版本</span></span><br><span class="line">$ yay -S vagrant</span><br></pre></td></tr></table></figure>
+
+<p>安装完重启。</p>
+<h2 id="安装-Homestead"><a href="#安装-Homestead" class="headerlink" title="安装 Homestead"></a>安装 Homestead</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vagrant box add laravel/homestead	<span class="comment"># 执行命令 查看下载链接 使用下载工具下载</span></span><br></pre></td></tr></table></figure>
+
+<p>编写 <code>metadata.json</code> 文件，和 <code>virtualbox.box</code> 放同一目录，<strong>使用非中文路径</strong>。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"name"</span>: <span class="string">"laravel/homestead"</span>,</span><br><span class="line">    <span class="attr">"versions"</span>: </span><br><span class="line">    [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">"version"</span>: <span class="string">"6.4.0"</span>,</span><br><span class="line">            <span class="attr">"providers"</span>: [</span><br><span class="line">                &#123;</span><br><span class="line">                  <span class="attr">"name"</span>: <span class="string">"virtualbox"</span>,</span><br><span class="line">                  <span class="attr">"url"</span>: <span class="string">"virtualbox.box"</span></span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>导入盒子</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vagrant box add metadata.json</span><br></pre></td></tr></table></figure>
+
+<a id="more"></a>
+
+<h2 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h2><p>下载管理脚本 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2xhcmF2ZWwvaG9tZXN0ZWFkL3JlbGVhc2Vz" title="https://github.com/laravel/homestead/releases">查看最新版本<i class="fa fa-external-link"></i></span></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> https://github.com/laravel/homestead.git ~/Homestead</span><br><span class="line">$ <span class="built_in">cd</span> ~/Homestead</span><br><span class="line">$ git checkout v7.8.0 <span class="comment"># 切换最新分支</span></span><br><span class="line">$ bash init.sh <span class="comment"># 初始化环境参数</span></span><br></pre></td></tr></table></figure>
+
+<p>创建<code>~/Code</code>文件夹</p>
+<p>配置<code>Homestead.yaml</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">ip: &quot;192.168.0.111&quot;</span><br><span class="line">memory: 2048</span><br><span class="line">cpus: 2</span><br><span class="line">provider: virtualbox</span><br><span class="line"></span><br><span class="line">authorize: ~/.ssh/id_rsa.pub</span><br><span class="line"></span><br><span class="line">keys:</span><br><span class="line">    - ~/.ssh/id_rsa</span><br><span class="line">    - ~/.ssh/id_rsa.pub</span><br><span class="line"></span><br><span class="line">folders:</span><br><span class="line">    - map: ~/Code</span><br><span class="line">      to: /home/vagrant/Code</span><br><span class="line"></span><br><span class="line">sites:</span><br><span class="line">    - map: laravel.test</span><br><span class="line">      to: /home/vagrant/Code/laravel/public</span><br><span class="line"></span><br><span class="line">databases:</span><br><span class="line">    - laravel</span><br><span class="line"></span><br><span class="line">features:</span><br><span class="line">    - mariadb: false</span><br><span class="line">    - ohmyzsh: false</span><br><span class="line">    - webdriver: false</span><br><span class="line"></span><br><span class="line"># ports:</span><br><span class="line">#     - send: 50000</span><br><span class="line">#       to: 5000</span><br><span class="line">#     - send: 7777</span><br><span class="line">#       to: 777</span><br><span class="line">#       protocol: udp</span><br><span class="line"></span><br><span class="line"># variables:</span><br><span class="line">#     - key: APP_ENV</span><br><span class="line">#       value: local</span><br></pre></td></tr></table></figure>
+
+<p>启动&amp;登录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vagrant up &amp;&amp; vagrant ssh</span><br></pre></td></tr></table></figure>
+
+<p>切换国内镜像</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ npm config <span class="built_in">set</span> registry https://registry.npm.taobao.org</span><br><span class="line">$ yarn config <span class="built_in">set</span> registry https://registry.npm.taobao.org</span><br><span class="line">$ composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/</span><br></pre></td></tr></table></figure>
+
+<p>配置git</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global user.name <span class="string">"name"</span></span><br><span class="line">$ git config --global user.email <span class="string">"email@example.com"</span></span><br><span class="line">$ git config --global push.default simple</span><br></pre></td></tr></table></figure>
+
+<p>添加<code>ssh-agent</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">eval</span> <span class="string">"<span class="variable">$(ssh-agent -s)</span>"</span></span><br><span class="line">$ ssh-add ~/.ssh/id_rsa</span><br></pre></td></tr></table></figure>
+
+<h2 id="操作指令"><a href="#操作指令" class="headerlink" title="操作指令"></a>操作指令</h2><h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vagrant up</span><br></pre></td></tr></table></figure>
+
+<h3 id="登录"><a href="#登录" class="headerlink" title="登录"></a>登录</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ vagrant ssh</span><br><span class="line">$ ssh vagrant@127.0.0.1	-p 2222 <span class="comment"># 如果上面登陆失败, 还可以通过此方式</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="重启"><a href="#重启" class="headerlink" title="重启"></a>重启</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vagrant reload</span><br></pre></td></tr></table></figure>
+
+<h3 id="关闭"><a href="#关闭" class="headerlink" title="关闭"></a>关闭</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vagrant halt</span><br></pre></td></tr></table></figure>
+
+<h3 id="刷新配置"><a href="#刷新配置" class="headerlink" title="刷新配置"></a>刷新配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vagrant reload --provision</span><br></pre></td></tr></table></figure>
+
+<h2 id="容器操作"><a href="#容器操作" class="headerlink" title="容器操作"></a>容器操作</h2><h3 id="查看列表"><a href="#查看列表" class="headerlink" title="查看列表"></a>查看列表</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vagrant box list</span><br></pre></td></tr></table></figure>
+
+<h3 id="删除容器"><a href="#删除容器" class="headerlink" title="删除容器"></a>删除容器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vagrant box remove boxname</span><br></pre></td></tr></table></figure>
+
+<h3 id="删除虚拟机"><a href="#删除虚拟机" class="headerlink" title="删除虚拟机"></a>删除虚拟机</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vagrant destroy</span><br></pre></td></tr></table></figure>
+
+<h2 id="局域网访问"><a href="#局域网访问" class="headerlink" title="局域网访问"></a>局域网访问</h2><p>修改 <code>Homestead.yaml</code> 中 <code>ip</code> 参数为当前局域网同网段</p>
+<p>修改 <code>~/Homestead/scripts/homestead.rb</code> 中 <code>private_network</code> 参数为 <code>public_network</code></p>
+<figure class="highlight rb"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Configure A Private Network IP</span></span><br><span class="line">...</span><br><span class="line">config.vm.network <span class="symbol">:public_network</span>, <span class="symbol">ip:</span> settings[<span class="string">'ip'</span>] <span class="params">||</span>= <span class="string">'192.168.10.10'</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<h2 id="Windows优化"><a href="#Windows优化" class="headerlink" title="Windows优化"></a>Windows优化</h2><h3 id="NFS模式"><a href="#NFS模式" class="headerlink" title="NFS模式"></a>NFS模式</h3><p>安装插件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vagrant plugin install vagrant-winnfsd</span><br></pre></td></tr></table></figure>
+
+<p>修改文件<code>homestead/scripts/homestead.rb</code>, 将</p>
+<figure class="highlight rb"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Register All Of The Configured Shared Folders</span></span><br><span class="line"><span class="keyword">if</span> settings.<span class="keyword">include</span>? <span class="string">'folders'</span></span><br><span class="line">...</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p>替换为</p>
+<figure class="highlight rb"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Register All Of The Configured Shared Folders</span></span><br><span class="line"><span class="keyword">if</span> settings.<span class="keyword">include</span>? <span class="string">'folders'</span></span><br><span class="line">    settings[<span class="string">"folders"</span>].sort! &#123; <span class="params">|a,b|</span> a[<span class="string">"map"</span>].length &lt;=&gt; b[<span class="string">"map"</span>].length &#125;</span><br><span class="line"></span><br><span class="line">    settings[<span class="string">"folders"</span>].each <span class="keyword">do</span> <span class="params">|folder|</span></span><br><span class="line">        config.vm.synced_folder folder[<span class="string">"map"</span>], folder[<span class="string">"to"</span>], </span><br><span class="line">        <span class="symbol">id:</span> folder[<span class="string">"map"</span>],</span><br><span class="line">        <span class="symbol">:nfs</span> =&gt; <span class="literal">true</span>,</span><br><span class="line">        <span class="symbol">:mount_options</span> =&gt; [<span class="string">'nolock,vers=3,udp,noatime'</span>]</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p>修改文件<code>Homestead.yaml</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">folders:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">map:</span> <span class="string">~/Code</span></span><br><span class="line">      <span class="attr">to:</span> <span class="string">/home/vagrant/Code</span></span><br><span class="line">      <span class="attr">type:</span> <span class="string">nfs</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="SMB模式"><a href="#SMB模式" class="headerlink" title="SMB模式"></a>SMB模式</h3><p>修改文件<code>Vagrantfile</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">...</span></span><br><span class="line"><span class="string">Vagrant.configure(VAGRANTFILE_API_VERSION)</span> <span class="string">do</span> <span class="string">|config|</span></span><br><span class="line"><span class="comment">#SMB</span></span><br><span class="line"><span class="string">config.vm.synced_folder</span> <span class="string">"."</span><span class="string">,</span> <span class="string">"/vagrant"</span><span class="string">,</span> <span class="attr">type:</span> <span class="string">"smb"</span><span class="string">,</span></span><br><span class="line">    <span class="attr">smb_username:</span> <span class="string">""</span><span class="string">,</span></span><br><span class="line">    <span class="attr">smb_password:</span> <span class="string">""</span><span class="string">,</span></span><br><span class="line">    <span class="attr">owner:</span> <span class="string">"vagrant"</span><span class="string">,</span></span><br><span class="line">    <span class="attr">group:</span> <span class="string">"root"</span></span><br><span class="line"><span class="string">...</span></span><br></pre></td></tr></table></figure>
+
+<p>修改文件<code>Homestead.yaml</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">folders:</span><br><span class="line">    - map: ~/Code</span><br><span class="line">        to: /home/vagrant/Code</span><br><span class="line">        <span class="built_in">type</span>: smb</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>修改<code>nginx</code>参数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># FILE: /etc/nginx/nginx.conf</span><br><span class="line"># 需要 sudo 权限</span><br><span class="line">sendfile: off</span><br></pre></td></tr></table></figure>
+
+<h2 id="科学上网"><a href="#科学上网" class="headerlink" title="科学上网"></a>科学上网</h2><p>安装插件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vagrant plugin install vagrant-proxyconf</span><br></pre></td></tr></table></figure>
+
+<p>SSR客户端 -&gt; 选项设置 -&gt; 允许来自局域网的链接</p>
+<p>修改文件<code>Vagrantfile</code>，代理ip为主机IPv4地址</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">if</span> <span class="string">Vagrant.has_plugin?("vagrant-proxyconf")</span></span><br><span class="line">	<span class="string">config.proxy.http</span> <span class="string">=</span> <span class="string">"http://192.168.1.112:1080/"</span></span><br><span class="line">	<span class="string">config.proxy.https</span> <span class="string">=</span> <span class="string">"http://192.168.1.112:1080/"</span></span><br><span class="line">	<span class="string">config.proxy.no_proxy</span> <span class="string">=</span> <span class="string">"localhost,127.0.0.1"</span></span><br><span class="line"><span class="string">end</span></span><br></pre></td></tr></table></figure>
+
+<p>测试连接</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ curl -v  <span class="string">"www.google.com"</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="延伸阅读"><a href="#延伸阅读" class="headerlink" title="延伸阅读"></a>延伸阅读</h2><ul>
+<li><p><span class="exturl" data-url="aHR0cHM6Ly9sZWFybmt1LmNvbS9kb2NzL2xhcmF2ZWwtZGV2ZWxvcG1lbnQtZW52aXJvbm1lbnQvNS44L2RldmVsb3BtZW50LWVudmlyb25tZW50LXdpbmRvd3MvNDM3Mw==" title="https://learnku.com/docs/laravel-development-environment/5.8/development-environment-windows/4373">开发环境搭建 - Windows<i class="fa fa-external-link"></i></span></p>
+</li>
+<li><p><span class="exturl" data-url="aHR0cHM6Ly9sZWFybmt1LmNvbS9kb2NzL2xhcmF2ZWwtZGV2ZWxvcG1lbnQtZW52aXJvbm1lbnQvNS44L3VwZ3JhZGUtaG9tZXN0ZWFkLWJveC80Mzc2" title="https://learnku.com/docs/laravel-development-environment/5.8/upgrade-homestead-box/4376">如何升级 Homestead 盒子？<i class="fa fa-external-link"></i></span></p>
+</li>
+<li><p><span class="exturl" data-url="aHR0cDovL3d3dy5jbmJsb2dzLmNvbS9kYXZlbmtpbi9wL3ZhZ3JhbnQtdmlydHVhbGJveC5odG1s" title="http://www.cnblogs.com/davenkin/p/vagrant-virtualbox.html">Vagrant入门<i class="fa fa-external-link"></i></span></p>
+</li>
+<li><p><span class="exturl" data-url="aHR0cHM6Ly9sYXJhdmVsLmNvbS9kb2NzLzUuNy9ob21lc3RlYWQ=" title="https://laravel.com/docs/5.7/homestead">Homestead 官方文档<i class="fa fa-external-link"></i></span></p>
+</li>
+<li><p><span class="exturl" data-url="aHR0cHM6Ly9sYXJhdmVsLWNoaW5hLm9yZy90b3BpY3MvMjk5MC9sYXJhdmVsLWhvbWVzdGVhZC1lbnZpcm9ubWVudC10by1idWlsZC1hLXZhcmlldHktb2YtcGl0cw==" title="https://laravel-china.org/topics/2990/laravel-homestead-environment-to-build-a-variety-of-pits">Laravel-Homestead 环境搭建的各种坑<i class="fa fa-external-link"></i></span></p>
+</li>
+<li><p><span class="exturl" data-url="aHR0cHM6Ly9sYXJhdmVsLWNoaW5hLm9yZy90b3BpY3MvNDc5Ni9zc2gtYXV0aC1tZXRob2QtcHJpdmF0ZS1rZXktc29sdXRpb24tc3VtbWFyeS13aGVuLWhvbWVzdGVhZC1zdGFydHM=" title="https://laravel-china.org/topics/4796/ssh-auth-method-private-key-solution-summary-when-homestead-starts">Homestead 安装问题汇总<i class="fa fa-external-link"></i></span></p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+      
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/diaries/this-year-i-am-27-28-years-old/" rel="next" title="我今年，二十七八岁">
+                  <i class="fa fa-chevron-left"></i> 我今年，二十七八岁
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/git/init/" rel="prev" title="Git 初始化配置">
+                  Git 初始化配置 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装虚拟机"><span class="nav-number">1.</span> <span class="nav-text">安装虚拟机</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Windows"><span class="nav-number">1.1.</span> <span class="nav-text">Windows</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Manjaro"><span class="nav-number">1.2.</span> <span class="nav-text">Manjaro</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装-Homestead"><span class="nav-number">2.</span> <span class="nav-text">安装 Homestead</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#环境配置"><span class="nav-number">3.</span> <span class="nav-text">环境配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作指令"><span class="nav-number">4.</span> <span class="nav-text">操作指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#启动"><span class="nav-number">4.1.</span> <span class="nav-text">启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#登录"><span class="nav-number">4.2.</span> <span class="nav-text">登录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重启"><span class="nav-number">4.3.</span> <span class="nav-text">重启</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关闭"><span class="nav-number">4.4.</span> <span class="nav-text">关闭</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#刷新配置"><span class="nav-number">4.5.</span> <span class="nav-text">刷新配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#容器操作"><span class="nav-number">5.</span> <span class="nav-text">容器操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查看列表"><span class="nav-number">5.1.</span> <span class="nav-text">查看列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除容器"><span class="nav-number">5.2.</span> <span class="nav-text">删除容器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除虚拟机"><span class="nav-number">5.3.</span> <span class="nav-text">删除虚拟机</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#局域网访问"><span class="nav-number">6.</span> <span class="nav-text">局域网访问</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Windows优化"><span class="nav-number">7.</span> <span class="nav-text">Windows优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#NFS模式"><span class="nav-number">7.1.</span> <span class="nav-text">NFS模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SMB模式"><span class="nav-number">7.2.</span> <span class="nav-text">SMB模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#科学上网"><span class="nav-number">8.</span> <span class="nav-text">科学上网</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#延伸阅读"><span class="nav-number">9.</span> <span class="nav-text">延伸阅读</span></a></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/static/waixiwai_avatar.jpg"
+      alt="池水">
+  <p class="site-author-name" itemprop="name">池水</p>
+  <div class="site-description" itemprop="description">『希望收藏夹不要再吃灰』</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">77</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3dhaXhpd2Fp" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;waixiwai"><i class="fa fa-fw fa-github"></i>GitHub</span>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <span class="exturl" data-url="bWFpbHRvOmlAd2FpeGl3YWkuY29t" title="E-Mail &amp;rarr; mailto:i@waixiwai.com"><i class="fa fa-fw fa-envelope"></i>E-Mail</span>
+      </span>
+    
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">池水</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    
+    <span title="站点总字数">74k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    
+    <span title="站点阅读时长">1:07</span>
+</div>
+  <div class="powered-by">由 <span class="exturl theme-link" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">
+      
+    主题 – <span class="exturl theme-link" data-url="aHR0cHM6Ly9waXNjZXMudGhlbWUtbmV4dC5vcmc=">NexT.Pisces</span> v7.4.2
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+  
+    <span class="post-meta-divider">|</span>
+  
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.1.0/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/velocity-animate@1/velocity.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/velocity-animate@1/velocity.ui.min.js"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.4.2"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

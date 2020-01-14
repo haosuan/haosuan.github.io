@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon.png?v=7.4.2">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="baidu-site-verification" content="CdzcA78E2w">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: true,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":true,"style":"mac"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: true,
+    lazyload: true,
+    pangu: true,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.json',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="模板继承@endsection 和 @show@section() 可以使用多种结尾，不同的结尾有不同的含义：  @endsection 定义一个片段的结尾 @show 定义的同时 立即 yield 这个片段  追加内容到父模板在子模板中，可以使用 @parent 来为父模板追加内容，而不是覆盖父模板。 123456@extends(&amp;apos;layouts.app&amp;apos;)@section(&amp;apos;sidebar&amp;apos;">
+<meta name="keywords" content="池水,chishui">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Laravel Blade 模板语法">
+<meta property="og:url" content="https:&#x2F;&#x2F;www.waixiwai.com&#x2F;laravel&#x2F;blade&#x2F;index.html">
+<meta property="og:site_name" content="风铃呀轻响">
+<meta property="og:description" content="模板继承@endsection 和 @show@section() 可以使用多种结尾，不同的结尾有不同的含义：  @endsection 定义一个片段的结尾 @show 定义的同时 立即 yield 这个片段  追加内容到父模板在子模板中，可以使用 @parent 来为父模板追加内容，而不是覆盖父模板。 123456@extends(&amp;apos;layouts.app&amp;apos;)@section(&amp;apos;sidebar&amp;apos;">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-11-19T01:28:27.781Z">
+<meta name="twitter:card" content="summary">
+  <link rel="canonical" href="https://www.waixiwai.com/laravel/blade/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Laravel Blade 模板语法 | 风铃呀轻响</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?8cd55c6e8de01d5da6e4090022ce2590";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">风铃呀轻响</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">鸟儿轻唱，远处谁在和。</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+        
+        
+        <li class="menu-item menu-item-home">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+      
+    
+      
+      
+        
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+      
+      
+        
+      
+        
+          
+        
+      
+        
+      
+    
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">18</span></a>
+
+  </li>
+      
+    
+      
+      
+        
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+      
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">77</span></a>
+
+  </li>
+      
+    
+      
+      
+        
+        
+        <li class="menu-item menu-item-收藏夹">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/favorites/" rel="section"><i class="fa fa-fw fa-bookmark"></i>收藏夹</a>
+
+  </li>
+      
+    
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger">
+          <i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+    
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.waixiwai.com/laravel/blade/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="池水">
+      <meta itemprop="description" content="『希望收藏夹不要再吃灰』">
+      <meta itemprop="image" content="/static/waixiwai_avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="风铃呀轻响">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            Laravel Blade 模板语法
+            
+
+          
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-10-31 15:42:59" itemprop="dateCreated datePublished" datetime="2019-10-31T15:42:59+08:00">2019-10-31</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-19 09:28:27" itemprop="dateModified" datetime="2019-11-19T09:28:27+08:00">2019-11-19</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Laravel/" itemprop="url" rel="index">
+                    <span itemprop="name">Laravel</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+          
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">本文字数：</span>
+              
+              <span>4.6k</span>
+            </span>
+          
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              
+              <span>4 分钟</span>
+            </span>
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="模板继承"><a href="#模板继承" class="headerlink" title="模板继承"></a>模板继承</h2><h3 id="endsection-和-show"><a href="#endsection-和-show" class="headerlink" title="@endsection 和 @show"></a>@endsection 和 @show</h3><p><code>@section()</code> 可以使用多种结尾，不同的结尾有不同的含义：</p>
+<ul>
+<li><code>@endsection</code> 定义一个片段的结尾</li>
+<li><code>@show</code> 定义的同时 <strong>立即 yield</strong> 这个片段</li>
+</ul>
+<h3 id="追加内容到父模板"><a href="#追加内容到父模板" class="headerlink" title="追加内容到父模板"></a>追加内容到父模板</h3><p>在子模板中，可以使用 <code>@parent</code> 来为父模板追加内容，而不是覆盖父模板。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@extends(<span class="string">'layouts.app'</span>)</span><br><span class="line">@section(<span class="string">'sidebar'</span>)</span><br><span class="line">    @<span class="keyword">parent</span></span><br><span class="line">    &lt;!-- 下面这个 p 会追加到父模板的 sidebar 中 --&gt;</span><br><span class="line">    &lt;p&gt;This is appended to the master sidebar.&lt;/p&gt;</span><br><span class="line">@endsection</span><br></pre></td></tr></table></figure>
+
+<a id="more"></a>
+
+<h2 id="渲染数据"><a href="#渲染数据" class="headerlink" title="渲染数据"></a>渲染数据</h2><h3 id="不转义字符"><a href="#不转义字符" class="headerlink" title="不转义字符"></a>不转义字符</h3><p>Blade 双花括号 语句会自动使用 PHP 的 <code>htmlspecialchars</code> 函数传递来防范 XSS 攻击，如果不希望数据被转义，可以使用： </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;!! $name !!&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Array-gt-JSON"><a href="#Array-gt-JSON" class="headerlink" title="Array =&gt; JSON"></a>Array =&gt; JSON</h3><p>在向 JavaScript 传递数据时有时候会传递一个数组，并将其渲染成 JSON 格式，但在 blade 模板中不应该使用 <code>json_encode</code>，Laravel 提供了 <code>@json</code> 指令来解决这一需求，其和 <code>json_encode</code> 具有相同的参数：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">    <span class="keyword">var</span> app = @json($array);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> app = @json($array, JSON_PRETTY_PRINT);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="禁用双重编码"><a href="#禁用双重编码" class="headerlink" title="禁用双重编码"></a>禁用双重编码</h3><p> 默认情况下，Blade（和 Laravel 的 <code>e</code> 助手函数）将对 HTML 实体进行双重编码， 如果需要禁用：</p>
+<p><em>app/Providers/AppServiceProvider.php</em></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Support</span>\<span class="title">Facades</span>\<span class="title">Blade</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">boot</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Blade::withoutDoubleEncoding();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="blade-兼容-js-框架"><a href="#blade-兼容-js-框架" class="headerlink" title="blade 兼容 js 框架"></a>blade 兼容 js 框架</h3><p>许多 JavaScript 框架也使用 花括号 语法来表示预设的表达式应该显示在浏览器中，为了避免冲突，可以使用 <code>@</code> 符号通知 Blade 渲染引擎表达式应保持不变：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hello, @&#123;&#123; name &#125;&#125;.</span><br></pre></td></tr></table></figure>
+
+<p>这里，<code>@</code> 会被 blade 自动删除，而值将交由 js 引擎渲染处理。</p>
+<p>如果有整段的 js 变量，可以嵌套进 <code>@verbatim</code>，这样就不必每一个都加 <code>@</code>了：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@verbatim</span><br><span class="line">    &lt;div class="container"&gt;</span><br><span class="line">        Hello, &#123;&#123; name &#125;&#125;.</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">@endverbatim</span><br></pre></td></tr></table></figure>
+
+<h2 id="控制结构"><a href="#控制结构" class="headerlink" title="控制结构"></a>控制结构</h2><h3 id="除非-unless"><a href="#除非-unless" class="headerlink" title="除非 @unless"></a>除非 @unless</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@unless (Auth::check())</span><br><span class="line">    <span class="comment">// 除非已登录不然就显示</span></span><br><span class="line">    <span class="comment">// 在这里本质上和 @guest 一个意思</span></span><br><span class="line">@endunless</span><br></pre></td></tr></table></figure>
+
+<h3 id="存在-isset"><a href="#存在-isset" class="headerlink" title="存在 @isset"></a>存在 @isset</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@<span class="keyword">isset</span>($records)</span><br><span class="line">    <span class="comment">// 找到记录时</span></span><br><span class="line">@endisset</span><br></pre></td></tr></table></figure>
+
+<h3 id="为空-empty"><a href="#为空-empty" class="headerlink" title="为空 @empty"></a>为空 @empty</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@<span class="keyword">empty</span>($records)</span><br><span class="line">    <span class="comment">// 记录为空时</span></span><br><span class="line">@endempty</span><br></pre></td></tr></table></figure>
+
+<h3 id="身份验证-auth-和-guest"><a href="#身份验证-auth-和-guest" class="headerlink" title="身份验证 @auth 和 @guest"></a>身份验证 @auth 和 @guest</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@auth</span><br><span class="line">    <span class="comment">// 已登录</span></span><br><span class="line">@endauth</span><br><span class="line"></span><br><span class="line">@guest</span><br><span class="line">    <span class="comment">// 未登录</span></span><br><span class="line">@endguest</span><br></pre></td></tr></table></figure>
+
+<p>在需要时，<code>@auth</code> 和 <code>@guest</code> 可以指定应被效验的身份验证</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@auth(<span class="string">'admin'</span>)</span><br><span class="line">    <span class="comment">// 用户有管理权限</span></span><br><span class="line">@endauth</span><br><span class="line"></span><br><span class="line">@guest(<span class="string">'admin'</span>)</span><br><span class="line">    <span class="comment">// 用户无管理权限</span></span><br><span class="line">@endguest</span><br></pre></td></tr></table></figure>
+
+<h3 id="片段指令-hasSection"><a href="#片段指令-hasSection" class="headerlink" title="片段指令 @hasSection"></a>片段指令 @hasSection</h3><p> 检查片段是否包含指定内容：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@hasSection(<span class="string">'navigation'</span>)</span><br><span class="line">    &lt;div class="pull-right"&gt;</span><br><span class="line">        @<span class="keyword">yield</span>(<span class="string">'navigation'</span>)</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line"></span><br><span class="line">    &lt;div class="clearfix"&gt;&lt;/div&gt;</span><br><span class="line">@<span class="keyword">endif</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="循环-forelse"><a href="#循环-forelse" class="headerlink" title="循环 @forelse"></a>循环 @forelse</h3> <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@forelse ($users <span class="keyword">as</span> $user)</span><br><span class="line">    &lt;li&gt;&#123;&#123; $user-&gt;name &#125;&#125;&lt;/li&gt;</span><br><span class="line">@<span class="keyword">empty</span></span><br><span class="line">    &lt;p&gt;No users&lt;/p&gt;</span><br><span class="line">@endforelse</span><br></pre></td></tr></table></figure>
+
+<p>在循环中可以使用 <code>@break</code> 和 <code>@continue</code> 跳过当前迭代和结束循环，这两个指令也可以声明条件：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@<span class="keyword">foreach</span> ($users <span class="keyword">as</span> $user)</span><br><span class="line">    @<span class="keyword">continue</span>($user-&gt;type == <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    &lt;li&gt;&#123;&#123; $user-&gt;name &#125;&#125;&lt;/li&gt;</span><br><span class="line"></span><br><span class="line">    @<span class="keyword">break</span>($user-&gt;number == <span class="number">5</span>)</span><br><span class="line">@<span class="keyword">endforeach</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="循环变量-loop-和-parent"><a href="#循环变量-loop-和-parent" class="headerlink" title="循环变量 @loop 和 parent"></a>循环变量 @loop 和 parent</h3><p>循环过程中，在循环体内有一个可用的 <code>$loop</code> 变量。该变量提供了用于访问诸如当前循环的索引、当前是否为第一次或最后一次循环之类的少数有用的信息的途径： </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@<span class="keyword">foreach</span> ($users <span class="keyword">as</span> $user)</span><br><span class="line">    @<span class="keyword">if</span> ($loop-&gt;first)</span><br><span class="line">        This is the first iteration.</span><br><span class="line">    @<span class="keyword">endif</span></span><br><span class="line"></span><br><span class="line">    @<span class="keyword">if</span> ($loop-&gt;last)</span><br><span class="line">        This is the last iteration.</span><br><span class="line">    @<span class="keyword">endif</span></span><br><span class="line"></span><br><span class="line">    &lt;p&gt;This is user &#123;&#123; $user-&gt;id &#125;&#125;&lt;/p&gt;</span><br><span class="line">@<span class="keyword">endforeach</span></span><br></pre></td></tr></table></figure>
+
+<p>在嵌套循环中，还可以借助 <code>parent</code> 属性访问父循环的 <code>$loop</code> 变量： </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@<span class="keyword">foreach</span> ($users <span class="keyword">as</span> $user)</span><br><span class="line">    @<span class="keyword">foreach</span> ($user-&gt;posts <span class="keyword">as</span> $post)</span><br><span class="line">        @<span class="keyword">if</span> ($loop-&gt;parent-&gt;first)</span><br><span class="line">            This is first iteration of the <span class="keyword">parent</span> loop.</span><br><span class="line">        @<span class="keyword">endif</span></span><br><span class="line">    @<span class="keyword">endforeach</span></span><br><span class="line">@<span class="keyword">endforeach</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>$loop-&gt;index</code></td>
+<td>当前迭代的索引 (从 0 开始计数)。</td>
+</tr>
+<tr>
+<td><code>$loop-&gt;iteration</code></td>
+<td>当前循环迭代 (从 1 开始计算)。</td>
+</tr>
+<tr>
+<td><code>$loop-&gt;remaining</code></td>
+<td>循环中剩余迭代的数量。</td>
+</tr>
+<tr>
+<td><code>$loop-&gt;count</code></td>
+<td>被迭代的数组元素的总数。</td>
+</tr>
+<tr>
+<td><code>$loop-&gt;first</code></td>
+<td>是否为循环的第一次迭代。</td>
+</tr>
+<tr>
+<td><code>$loop-&gt;last</code></td>
+<td>是否为循环的最后一次迭代。</td>
+</tr>
+<tr>
+<td><code>$loop-&gt;even</code></td>
+<td>是否是循环中的偶数迭代。</td>
+</tr>
+<tr>
+<td><code>$loop-&gt;odd</code></td>
+<td>是否是循环中的奇数迭代。</td>
+</tr>
+<tr>
+<td><code>$loop-&gt;depth</code></td>
+<td>当前迭代的嵌套深度级数。</td>
+</tr>
+<tr>
+<td><code>$loop-&gt;parent</code></td>
+<td>嵌套循环中，父循环的循环变量。</td>
+</tr>
+</tbody></table>
+<h2 id="表单"><a href="#表单" class="headerlink" title="表单"></a>表单</h2><h3 id="CSRF-域-csrf"><a href="#CSRF-域-csrf" class="headerlink" title="CSRF 域 @csrf"></a>CSRF 域 @csrf</h3><p>所有 html 表单，都需要定义 CSRF令牌域。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;form method=<span class="string">"POST"</span> action=<span class="string">"/profile"</span>&gt;</span><br><span class="line">    @csrf</span><br><span class="line">    ...</span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Method-域-method"><a href="#Method-域-method" class="headerlink" title="Method 域 @method"></a>Method 域 @method</h3><p>html 表单不能发出 <code>put</code>, <code>patch</code>, <code>delete</code> 等请求，需要使用 <code>@method</code> 指令模仿动作。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;form action=<span class="string">"/foo/bar"</span> method=<span class="string">"POST"</span>&gt;</span><br><span class="line">    @method(<span class="string">'PUT'</span>)</span><br><span class="line">    ...</span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="验证错误-error"><a href="#验证错误-error" class="headerlink" title="验证错误 @error"></a>验证错误 @error</h3><p><code>@error</code> 指令可以快速检查验证错误消息是否存在，并且还可以使用 <code>@message</code> 输出验证错误。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;input id="title" type="text" class="@error('title') is-invalid @enderror"&gt;</span><br><span class="line">@error(<span class="string">'title'</span>)</span><br><span class="line">    &lt;div class="alert alert-danger"&gt;&#123;&#123; $message &#125;&#125;&lt;/div&gt;</span><br><span class="line">@enderror</span><br></pre></td></tr></table></figure>
+
+<p><code>@error</code> 可以指定错误验证字段名作为第二个参数， 去获取验证错误内容并可以通过多种形式展示在页面上：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;input id="email" type="email" class="@error('email', 'login') is-invalid @enderror"&gt;</span><br><span class="line"></span><br><span class="line">@error(<span class="string">'email'</span>, <span class="string">'login'</span>)</span><br><span class="line">    &lt;div class="alert alert-danger"&gt;&#123;&#123; $message &#125;&#125;&lt;/div&gt;</span><br><span class="line">@enderror</span><br></pre></td></tr></table></figure>
+
+<h2 id="引入子视图"><a href="#引入子视图" class="headerlink" title="引入子视图"></a>引入子视图</h2><h3 id="存在引入-includeIf"><a href="#存在引入-includeIf" class="headerlink" title="存在引入 @includeIf"></a>存在引入 @includeIf</h3><p>使用 <code>@include</code> 时，如果传递了一个不存在的视图会报错，如果不确定视图是否存在，可以使用：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@includeIf(<span class="string">'view.name'</span>, [<span class="string">'some'</span> =&gt; <span class="string">'data'</span>])</span><br></pre></td></tr></table></figure>
+
+<h3 id="条件引入-includeWhen"><a href="#条件引入-includeWhen" class="headerlink" title="条件引入 @includeWhen"></a>条件引入 @includeWhen</h3><p>需要包含一个依赖于给定布尔条件的视图，可以使用 ：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@includeWhen($boolean, <span class="string">'view.name'</span>, [<span class="string">'some'</span> =&gt; <span class="string">'data'</span>])</span><br></pre></td></tr></table></figure>
+
+<h3 id="引入第一个存在-includeFirst"><a href="#引入第一个存在-includeFirst" class="headerlink" title="引入第一个存在 @includeFirst"></a>引入第一个存在 @includeFirst</h3><p>要引用给定视图数组中第一个存在的视图，可以使用： </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@includeFirst([<span class="string">'custom.admin'</span>, <span class="string">'admin'</span>], [<span class="string">'some'</span> =&gt; <span class="string">'data'</span>])</span><br></pre></td></tr></table></figure>
+
+<h2 id="视图别名"><a href="#视图别名" class="headerlink" title="视图别名"></a>视图别名</h2><p>假如有一个视图</p>
+<p><em>resources/views/includes/input.blade.php</em></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;input type=<span class="string">"&#123;&#123; $type ?? 'text' &#125;&#125;"</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<p>注册别名</p>
+<p><em>app/Providers/AppServiceProvider.php</em></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Support</span>\<span class="title">Facades</span>\<span class="title">Blade</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">boot</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Blade::include(<span class="string">'includes.input'</span>, <span class="string">'input'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样就可以像 blade 指令一样渲染视图</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@input([<span class="string">'type'</span> =&gt; <span class="string">'email'</span>])</span><br></pre></td></tr></table></figure>
+
+<h2 id="堆栈"><a href="#堆栈" class="headerlink" title="堆栈"></a>堆栈</h2><p>Blade 允许将视图压入堆栈，这些视图能够在其它视图或布局中被渲染。</p>
+<p><strong>这在子视图中指定需要的 JavaScript 库时非常有用</strong>：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@push(<span class="string">'scripts'</span>)</span><br><span class="line">    &lt;script src=<span class="string">"/example.js"</span>&gt;&lt;/script&gt;</span><br><span class="line">@endpush</span><br></pre></td></tr></table></figure>
+
+<p>如果需要，可以多次压入堆栈。通过向 <code>@stack</code> 指令传递堆栈名称来完成堆栈内容的渲染： </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;!-- 头部内容 --&gt;</span><br><span class="line"></span><br><span class="line">    @stack(<span class="string">'scripts'</span>)</span><br><span class="line">&lt;/head&gt;</span><br></pre></td></tr></table></figure>
+
+<p> 如果想要将内容预置在栈顶，需要使用 <code>@prepend</code> 指令： </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@push(<span class="string">'scripts'</span>)</span><br><span class="line">    This will be second...</span><br><span class="line">@endpush</span><br><span class="line"></span><br><span class="line"><span class="comment">// 然后...</span></span><br><span class="line"></span><br><span class="line">@prepend(<span class="string">'scripts'</span>)</span><br><span class="line">    This will be first...</span><br><span class="line">@endprepend</span><br></pre></td></tr></table></figure>
+
+<h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><p>blade 允许在视图中注释，且注释不会渲染到 html 中。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;-- comment --&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="原生-PHP"><a href="#原生-PHP" class="headerlink" title="原生 PHP"></a>原生 PHP</h2><p>在某些情况下，需要直接在 blade 中书写 PHP 代码，这时候可以：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@php</span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">@endphp</span><br></pre></td></tr></table></figure>
+
+<h2 id="没整理"><a href="#没整理" class="headerlink" title="没整理"></a>没整理</h2><h3 id="组件和插槽"><a href="#组件和插槽" class="headerlink" title="组件和插槽"></a>组件和插槽</h3><h3 id="为集合渲染视图"><a href="#为集合渲染视图" class="headerlink" title="为集合渲染视图"></a>为集合渲染视图</h3><h3 id="Service-注入"><a href="#Service-注入" class="headerlink" title="Service 注入"></a>Service 注入</h3><h3 id="扩展-Blade"><a href="#扩展-Blade" class="headerlink" title="扩展 Blade"></a>扩展 Blade</h3>
+    </div>
+
+    
+    
+    
+        
+      
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/laravel/accept-header/" rel="next" title="Laravel 自定义中间件为请求添加 Accept Header">
+                  <i class="fa fa-chevron-left"></i> Laravel 自定义中间件为请求添加 Accept Header
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/laravel/quill/" rel="prev" title="Laravel 使用 Quill 富文本编辑器">
+                  Laravel 使用 Quill 富文本编辑器 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#模板继承"><span class="nav-number">1.</span> <span class="nav-text">模板继承</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#endsection-和-show"><span class="nav-number">1.1.</span> <span class="nav-text">@endsection 和 @show</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#追加内容到父模板"><span class="nav-number">1.2.</span> <span class="nav-text">追加内容到父模板</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#渲染数据"><span class="nav-number">2.</span> <span class="nav-text">渲染数据</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#不转义字符"><span class="nav-number">2.1.</span> <span class="nav-text">不转义字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Array-gt-JSON"><span class="nav-number">2.2.</span> <span class="nav-text">Array =&gt; JSON</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#禁用双重编码"><span class="nav-number">2.3.</span> <span class="nav-text">禁用双重编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#blade-兼容-js-框架"><span class="nav-number">2.4.</span> <span class="nav-text">blade 兼容 js 框架</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#控制结构"><span class="nav-number">3.</span> <span class="nav-text">控制结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#除非-unless"><span class="nav-number">3.1.</span> <span class="nav-text">除非 @unless</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#存在-isset"><span class="nav-number">3.2.</span> <span class="nav-text">存在 @isset</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为空-empty"><span class="nav-number">3.3.</span> <span class="nav-text">为空 @empty</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#身份验证-auth-和-guest"><span class="nav-number">3.4.</span> <span class="nav-text">身份验证 @auth 和 @guest</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#片段指令-hasSection"><span class="nav-number">3.5.</span> <span class="nav-text">片段指令 @hasSection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#循环-forelse"><span class="nav-number">3.6.</span> <span class="nav-text">循环 @forelse</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#循环变量-loop-和-parent"><span class="nav-number">3.7.</span> <span class="nav-text">循环变量 @loop 和 parent</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#表单"><span class="nav-number">4.</span> <span class="nav-text">表单</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CSRF-域-csrf"><span class="nav-number">4.1.</span> <span class="nav-text">CSRF 域 @csrf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Method-域-method"><span class="nav-number">4.2.</span> <span class="nav-text">Method 域 @method</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#验证错误-error"><span class="nav-number">4.3.</span> <span class="nav-text">验证错误 @error</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引入子视图"><span class="nav-number">5.</span> <span class="nav-text">引入子视图</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#存在引入-includeIf"><span class="nav-number">5.1.</span> <span class="nav-text">存在引入 @includeIf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#条件引入-includeWhen"><span class="nav-number">5.2.</span> <span class="nav-text">条件引入 @includeWhen</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#引入第一个存在-includeFirst"><span class="nav-number">5.3.</span> <span class="nav-text">引入第一个存在 @includeFirst</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#视图别名"><span class="nav-number">6.</span> <span class="nav-text">视图别名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#堆栈"><span class="nav-number">7.</span> <span class="nav-text">堆栈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注释"><span class="nav-number">8.</span> <span class="nav-text">注释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原生-PHP"><span class="nav-number">9.</span> <span class="nav-text">原生 PHP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#没整理"><span class="nav-number">10.</span> <span class="nav-text">没整理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#组件和插槽"><span class="nav-number">10.1.</span> <span class="nav-text">组件和插槽</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为集合渲染视图"><span class="nav-number">10.2.</span> <span class="nav-text">为集合渲染视图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Service-注入"><span class="nav-number">10.3.</span> <span class="nav-text">Service 注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扩展-Blade"><span class="nav-number">10.4.</span> <span class="nav-text">扩展 Blade</span></a></li></ol></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/static/waixiwai_avatar.jpg"
+      alt="池水">
+  <p class="site-author-name" itemprop="name">池水</p>
+  <div class="site-description" itemprop="description">『希望收藏夹不要再吃灰』</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">77</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3dhaXhpd2Fp" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;waixiwai"><i class="fa fa-fw fa-github"></i>GitHub</span>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <span class="exturl" data-url="bWFpbHRvOmlAd2FpeGl3YWkuY29t" title="E-Mail &amp;rarr; mailto:i@waixiwai.com"><i class="fa fa-fw fa-envelope"></i>E-Mail</span>
+      </span>
+    
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">池水</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    
+    <span title="站点总字数">74k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    
+    <span title="站点阅读时长">1:07</span>
+</div>
+  <div class="powered-by">由 <span class="exturl theme-link" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">
+      
+    主题 – <span class="exturl theme-link" data-url="aHR0cHM6Ly9waXNjZXMudGhlbWUtbmV4dC5vcmc=">NexT.Pisces</span> v7.4.2
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+  
+    <span class="post-meta-divider">|</span>
+  
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.1.0/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/velocity-animate@1/velocity.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/velocity-animate@1/velocity.ui.min.js"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.4.2"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon.png?v=7.4.2">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="baidu-site-verification" content="CdzcA78E2w">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: true,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":true,"style":"mac"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: true,
+    lazyload: true,
+    pangu: true,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.json',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="创建迁移创建新表1$ php artisan make:migration create_users_table --create=users  修改旧表1$ php artisan make:migration add_votes_to_users_table --table=users  指定路径1$ php artisan make:migration create_users_table">
+<meta name="keywords" content="池水,chishui">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Laravel 数据库迁移『Migrations』">
+<meta property="og:url" content="https:&#x2F;&#x2F;www.waixiwai.com&#x2F;laravel&#x2F;migrations&#x2F;index.html">
+<meta property="og:site_name" content="风铃呀轻响">
+<meta property="og:description" content="创建迁移创建新表1$ php artisan make:migration create_users_table --create=users  修改旧表1$ php artisan make:migration add_votes_to_users_table --table=users  指定路径1$ php artisan make:migration create_users_table">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-11-19T01:28:35.657Z">
+<meta name="twitter:card" content="summary">
+  <link rel="canonical" href="https://www.waixiwai.com/laravel/migrations/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Laravel 数据库迁移『Migrations』 | 风铃呀轻响</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?8cd55c6e8de01d5da6e4090022ce2590";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">风铃呀轻响</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">鸟儿轻唱，远处谁在和。</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+        
+        
+        <li class="menu-item menu-item-home">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+      
+    
+      
+      
+        
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+      
+      
+        
+      
+        
+          
+        
+      
+        
+      
+    
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">18</span></a>
+
+  </li>
+      
+    
+      
+      
+        
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+      
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">77</span></a>
+
+  </li>
+      
+    
+      
+      
+        
+        
+        <li class="menu-item menu-item-收藏夹">
+      
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/favorites/" rel="section"><i class="fa fa-fw fa-bookmark"></i>收藏夹</a>
+
+  </li>
+      
+    
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger">
+          <i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+    
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.waixiwai.com/laravel/migrations/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="池水">
+      <meta itemprop="description" content="『希望收藏夹不要再吃灰』">
+      <meta itemprop="image" content="/static/waixiwai_avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="风铃呀轻响">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            Laravel 数据库迁移『Migrations』
+            
+
+          
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-11-13 16:43:59" itemprop="dateCreated datePublished" datetime="2019-11-13T16:43:59+08:00">2019-11-13</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-19 09:28:35" itemprop="dateModified" datetime="2019-11-19T09:28:35+08:00">2019-11-19</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Laravel/" itemprop="url" rel="index">
+                    <span itemprop="name">Laravel</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+          
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">本文字数：</span>
+              
+              <span>5.3k</span>
+            </span>
+          
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              
+              <span>5 分钟</span>
+            </span>
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="创建迁移"><a href="#创建迁移" class="headerlink" title="创建迁移"></a>创建迁移</h1><h2 id="创建新表"><a href="#创建新表" class="headerlink" title="创建新表"></a>创建新表</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ php artisan make:migration create_users_table --create=users</span><br></pre></td></tr></table></figure>
+
+<h2 id="修改旧表"><a href="#修改旧表" class="headerlink" title="修改旧表"></a>修改旧表</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ php artisan make:migration add_votes_to_users_table --table=users</span><br></pre></td></tr></table></figure>
+
+<h2 id="指定路径"><a href="#指定路径" class="headerlink" title="指定路径"></a>指定路径</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ php artisan make:migration create_users_table --path=xxxxxx</span><br></pre></td></tr></table></figure>
+
+<a id="more"></a>
+
+<h1 id="运行迁移"><a href="#运行迁移" class="headerlink" title="运行迁移"></a>运行迁移</h1><h2 id="执行迁移"><a href="#执行迁移" class="headerlink" title="执行迁移"></a>执行迁移</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ php artisan migrate</span><br><span class="line">$ php artisan migrate --force <span class="comment"># 强制执行</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="回滚迁移"><a href="#回滚迁移" class="headerlink" title="回滚迁移"></a>回滚迁移</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ php artisan migrate:rollback <span class="comment"># 回滚到最后一次</span></span><br><span class="line">$ php artisan migrate:rollback --step=5 <span class="comment"># 回滚指定次数</span></span><br><span class="line">$ php artisan migrate:reset <span class="comment"># 回滚所有</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="刷新迁移"><a href="#刷新迁移" class="headerlink" title="刷新迁移"></a>刷新迁移</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ migrate:refresh <span class="comment"># 回滚你所有的迁移后执行 migrate 命令</span></span><br><span class="line">$ php artisan migrate:refresh --seed <span class="comment"># 刷新数据库并执行数据库填充</span></span><br><span class="line">$ php artisan migrate:refresh --step=5 <span class="comment"># 回滚并重新迁移指定数量的迁移</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="删除迁移"><a href="#删除迁移" class="headerlink" title="删除迁移"></a>删除迁移</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ php artisan migrate:fresh <span class="comment"># 删除数据中所有的数据表并在之后执行 migrate 命令</span></span><br><span class="line">$ php artisan migrate:fresh --seed</span><br></pre></td></tr></table></figure>
+
+<h1 id="数据表"><a href="#数据表" class="headerlink" title="数据表"></a>数据表</h1><h2 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h2><h1 id="字段类型"><a href="#字段类型" class="headerlink" title="字段类型"></a>字段类型</h1><h2 id="ID"><a href="#ID" class="headerlink" title="ID"></a>ID</h2><h3 id="自增ID"><a href="#自增ID" class="headerlink" title="自增ID"></a>自增ID</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;bigIncrements(<span class="string">'id'</span>); <span class="comment">// UNSIGNED BIG INTEGER</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;increments(<span class="string">'id'</span>); <span class="comment">// UNSIGNED INTEGER</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;tinyIncrements(<span class="string">'id'</span>); <span class="comment">// UNSIGNED TINYINT</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;smallIncrements(<span class="string">'id'</span>); <span class="comment">// UNSIGNED SMALLINT</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;mediumIncrements(<span class="string">'id'</span>); <span class="comment">// UNSIGNED MEDIUM INTEGER</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="UUID"><a href="#UUID" class="headerlink" title="UUID"></a>UUID</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;uuid(<span class="string">'id'</span>);	<span class="comment">// UUID</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="数值"><a href="#数值" class="headerlink" title="数值"></a>数值</h2><h3 id="整数"><a href="#整数" class="headerlink" title="整数"></a>整数</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;bigInteger(<span class="string">'votes'</span>); <span class="comment">// BIGINT</span></span><br><span class="line">$table-&gt;unsignedBigInteger(<span class="string">'votes'</span>); <span class="comment">// UNSIGNED BIGINT</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;integer(<span class="string">'votes'</span>); <span class="comment">// INTEGER</span></span><br><span class="line">$table-&gt;unsignedInteger(<span class="string">'votes'</span>); <span class="comment">// UNSIGNED INTEGER</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;tinyInteger(<span class="string">'votes'</span>); <span class="comment">// TINYINT</span></span><br><span class="line">$table-&gt;unsignedTinyInteger(<span class="string">'votes'</span>); <span class="comment">// UNSIGNED TINYINT</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;smallInteger(<span class="string">'votes'</span>); <span class="comment">// SMALLINT</span></span><br><span class="line">$table-&gt;unsignedSmallInteger(<span class="string">'votes'</span>); <span class="comment">// UNSIGNED SMALLINT</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;mediumInteger(<span class="string">'votes'</span>); <span class="comment">// MEDIUMINT</span></span><br><span class="line">$table-&gt;unsignedMediumInteger(<span class="string">'votes'</span>); <span class="comment">// UNSIGNED MEDIUMINT</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="浮点数"><a href="#浮点数" class="headerlink" title="浮点数"></a>浮点数</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;float(<span class="string">'amount'</span>, <span class="number">8</span>, <span class="number">2</span>); <span class="comment">// FLOAT 带精度与基数</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;double(<span class="string">'amount'</span>, <span class="number">8</span>, <span class="number">2</span>);	<span class="comment">// DOUBLE 带精度与基数</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;decimal(<span class="string">'amount'</span>, <span class="number">8</span>, <span class="number">2</span>); <span class="comment">// DECIMAL 带精度与基数</span></span><br><span class="line">$table-&gt;unsignedDecimal(<span class="string">'amount'</span>, <span class="number">8</span>, <span class="number">2</span>); <span class="comment">// UNSIGNED DECIMAL 带精度与基数</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;char(<span class="string">'name'</span>, <span class="number">100</span>); <span class="comment">// CHAR 指定长度</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;string(<span class="string">'name'</span>); <span class="comment">// VARCHAR</span></span><br><span class="line">$table-&gt;string(<span class="string">'name'</span>, <span class="number">100</span>); <span class="comment">// VARCHAR 指定长度</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;longText(<span class="string">'description'</span>); <span class="comment">// LONGTEXT</span></span><br><span class="line">$table-&gt;text(<span class="string">'description'</span>); <span class="comment">// TEXT</span></span><br><span class="line">$table-&gt;mediumText(<span class="string">'description'</span>); <span class="comment">// MEDIUMTEXT</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;lineString(<span class="string">'positions'</span>); <span class="comment">// LINESTRING</span></span><br><span class="line">$table-&gt;multiLineString(<span class="string">'positions'</span>); <span class="comment">// MULTILINESTRING</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;rememberToken(); <span class="comment">// 可空版本的 VARCHAR (100) 的 remember_token 字段</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="日期时间"><a href="#日期时间" class="headerlink" title="日期时间"></a>日期时间</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;year(<span class="string">'birth_year'</span>); <span class="comment">// YEAR</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;date(<span class="string">'created_at'</span>); <span class="comment">// DATE</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;time(<span class="string">'sunrise'</span>); <span class="comment">// TIME</span></span><br><span class="line">$table-&gt;timeTz(<span class="string">'sunrise'</span>); <span class="comment">// TIME 带时区</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;dateTime(<span class="string">'created_at'</span>); <span class="comment">// DATETIME</span></span><br><span class="line">$table-&gt;dateTimeTz(<span class="string">'created_at'</span>); <span class="comment">// DATETIME 带时区</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;timestamp(<span class="string">'added_on'</span>); <span class="comment">// TIMESTAMP</span></span><br><span class="line">$table-&gt;timestampTz(<span class="string">'added_on'</span>); <span class="comment">// TIMESTAMP 带时区</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;timestamps(); <span class="comment">// TIMESTAMP 可空的 created_at 和 updated_at </span></span><br><span class="line">$table-&gt;timestampsTz(); <span class="comment">// TIMESTAMP 可空且带时区的 created_at 和 updated_at</span></span><br><span class="line">$table-&gt;nullableTimestamps(); <span class="comment">// 可空版本的 timestamps() 字段</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="BOOLEAN"><a href="#BOOLEAN" class="headerlink" title="BOOLEAN"></a>BOOLEAN</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;boolean(<span class="string">'confirmed'</span>); <span class="comment">// BOOLEAN</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="IP"><a href="#IP" class="headerlink" title="IP"></a>IP</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;ipAddress(<span class="string">'visitor'</span>); <span class="comment">// IP 地址</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;macAddress(<span class="string">'device'</span>); <span class="comment">// MAC 地址</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="JSON"><a href="#JSON" class="headerlink" title="JSON"></a>JSON</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;json(<span class="string">'options'</span>); <span class="comment">// JSON</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;jsonb(<span class="string">'options'</span>); <span class="comment">// JSONB</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="BLOB"><a href="#BLOB" class="headerlink" title="BLOB"></a>BLOB</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;binary(<span class="string">'data'</span>); <span class="comment">// BLOB</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="SET"><a href="#SET" class="headerlink" title="SET"></a>SET</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;set(<span class="string">'flavors'</span>, [<span class="string">'strawberry'</span>, <span class="string">'vanilla'</span>]); <span class="comment">// SET</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="ENUM"><a href="#ENUM" class="headerlink" title="ENUM"></a>ENUM</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;enum(<span class="string">'level'</span>, [<span class="string">'easy'</span>, <span class="string">'hard'</span>]); <span class="comment">// ENUM</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="GEOMETRY"><a href="#GEOMETRY" class="headerlink" title="GEOMETRY"></a>GEOMETRY</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;geometry(<span class="string">'positions'</span>); <span class="comment">// GEOMETRY</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;geometryCollection(<span class="string">'positions'</span>); <span class="comment">// GEOMETRYCOLLECTION</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="POINT"><a href="#POINT" class="headerlink" title="POINT"></a>POINT</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;point(<span class="string">'position'</span>); <span class="comment">// POINT</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;multiPoint(<span class="string">'positions'</span>); <span class="comment">// MULTIPOINT</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="POLYGON"><a href="#POLYGON" class="headerlink" title="POLYGON"></a>POLYGON</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;polygon(<span class="string">'positions'</span>); <span class="comment">// POLYGON</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;multiPolygon(<span class="string">'positions'</span>); <span class="comment">// MULTIPOLYGON</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="morphs"><a href="#morphs" class="headerlink" title="morphs"></a>morphs</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;morphs(<span class="string">'taggable'</span>);	<span class="comment">// 加入递增的 taggable_id 与字符串 taggable_type</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;uuidMorphs(<span class="string">'taggable'</span>);	<span class="comment">// 加入 taggable_id 与字符串 taggable_type UUID 列</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;nullableMorphs(<span class="string">'taggable'</span>); <span class="comment">// 可空版本的 morphs () 字段</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;nullableUuidMorphs(<span class="string">'taggable'</span>); <span class="comment">// 可空版本的 uuidMorphs() 字段</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="软删除"><a href="#软删除" class="headerlink" title="软删除"></a>软删除</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;softDeletes(); <span class="comment">// 为软删除添加一个可空的 deleted_at 字段</span></span><br><span class="line">$table-&gt;softDeletesTz(); <span class="comment">// 为软删除添加一个可空的 带时区的 deleted_at 字段</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="索引字段"><a href="#索引字段" class="headerlink" title="索引字段"></a>索引字段</h1><h2 id="主键"><a href="#主键" class="headerlink" title="主键"></a>主键</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;primary(<span class="string">'id'</span>); <span class="comment">// 添加主键</span></span><br><span class="line">$table-&gt;primary([<span class="string">'id'</span>, <span class="string">'parent_id'</span>]); <span class="comment">// 复合索引</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="唯一索引"><a href="#唯一索引" class="headerlink" title="唯一索引"></a>唯一索引</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;string(<span class="string">'email'</span>)-&gt;unique(); <span class="comment">// 字段创建时指定</span></span><br><span class="line">$table-&gt;unique(<span class="string">'email'</span>); <span class="comment">// 字段创建后指定</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="普通索引"><a href="#普通索引" class="headerlink" title="普通索引"></a>普通索引</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;string(<span class="string">'view_count'</span>)-&gt;index();</span><br><span class="line">$table-&gt;index([<span class="string">'account_id'</span>, <span class="string">'created_at'</span>]); <span class="comment">// 复合索引</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="空间索引"><a href="#空间索引" class="headerlink" title="空间索引"></a>空间索引</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;spatialIndex(<span class="string">'location'</span>); <span class="comment">// 添加空间索引（不支持 SQLite）</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="自定义索引名称"><a href="#自定义索引名称" class="headerlink" title="自定义索引名称"></a>自定义索引名称</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;unique(<span class="string">'email'</span>, <span class="string">'unique_email'</span>); <span class="comment">// 第二个参数是 自定义索引名称</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="索引长度"><a href="#索引长度" class="headerlink" title="索引长度"></a>索引长度</h2><h3 id="TODO-1"><a href="#TODO-1" class="headerlink" title="TODO"></a>TODO</h3><h2 id="重命名索引"><a href="#重命名索引" class="headerlink" title="重命名索引"></a>重命名索引</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;renameIndex(<span class="string">'from'</span>, <span class="string">'to'</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="删除索引"><a href="#删除索引" class="headerlink" title="删除索引"></a>删除索引</h2><p>若要删除索引，则必须指定索引的名称。Laravel 默认会自动将数据库名称、索引的字段名及索引类型简单地连接在一起作为名称。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;dropPrimary(<span class="string">'users_id_primary'</span>); <span class="comment">// 从 users 表中删除主键</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;dropUnique(<span class="string">'users_email_unique'</span>); <span class="comment">// 从 users 表中删除唯一索引</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;dropIndex(<span class="string">'geo_state_index'</span>); <span class="comment">// 从 geo 表中删除基本索引</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$table-&gt;dropSpatialIndex(<span class="string">'geo_location_spatialindex'</span>); <span class="comment">// 从 geo 表中删除空间索引（不支持 SQLite）</span></span><br></pre></td></tr></table></figure>
+
+<p>如果将字段数组传给 dropIndex 方法，会删除根据表名、字段和键类型生成的索引名称：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Schema::table(<span class="string">'geo'</span>, <span class="function"><span class="keyword">function</span> <span class="params">(Blueprint $table)</span> </span>&#123;</span><br><span class="line">    $table-&gt;dropIndex([<span class="string">'state'</span>]); <span class="comment">// Drops index 'geo_state_index'</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h1 id="外键约束"><a href="#外键约束" class="headerlink" title="外键约束"></a>外键约束</h1><h2 id="TODO-2"><a href="#TODO-2" class="headerlink" title="TODO"></a>TODO</h2><h1 id="字段修饰符"><a href="#字段修饰符" class="headerlink" title="字段修饰符"></a>字段修饰符</h1><h2 id="字段位置"><a href="#字段位置" class="headerlink" title="字段位置"></a>字段位置</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-&gt;first() <span class="comment">// 将此字段放置在数据表的 "首位" (MySQL)</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-&gt;after(<span class="string">'column'</span>) <span class="comment">// 将此字段放置在其它字段 "之后" (MySQL)</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-&gt;comment(<span class="string">'my comment'</span>) <span class="comment">// 为字段增加注释 (MySQL)</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="默认值"><a href="#默认值" class="headerlink" title="默认值"></a>默认值</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-&gt;default($value) <span class="comment">// 为字段指定 "默认" 值</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="允许-NULL"><a href="#允许-NULL" class="headerlink" title="允许 NULL"></a>允许 NULL</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-&gt;nullable($value = <span class="keyword">true</span>) <span class="comment">// 此字段允许写入 NULL 值（默认情况下）</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="UNSIGNED"><a href="#UNSIGNED" class="headerlink" title="UNSIGNED"></a>UNSIGNED</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-&gt;unsigned() <span class="comment">// 设置 INTEGER 类型的字段为 UNSIGNED (MySQL)</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="自增主键"><a href="#自增主键" class="headerlink" title="自增主键"></a>自增主键</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-&gt;autoIncrement() <span class="comment">// 将 INTEGER 类型的字段设置为自动递增的主键</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="字符集"><a href="#字符集" class="headerlink" title="字符集"></a>字符集</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-&gt;charset(<span class="string">'utf8'</span>) <span class="comment">// 指定一个字符集 (MySQL)</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="排序规则"><a href="#排序规则" class="headerlink" title="排序规则"></a>排序规则</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-&gt;collation(<span class="string">'utf8_unicode_ci'</span>) <span class="comment">// 指定列的排序规则 (MySQL/SQL Server)</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="CURRENT-TIMESTAMP"><a href="#CURRENT-TIMESTAMP" class="headerlink" title="CURRENT_TIMESTAMP"></a>CURRENT_TIMESTAMP</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-&gt;useCurrent() <span class="comment">// 将 TIMESTAMP 类型的字段设置为使用 CURRENT_TIMESTAMP 作为默认值</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="存储生成"><a href="#存储生成" class="headerlink" title="存储生成"></a>存储生成</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-&gt;storedAs($expression) <span class="comment">// 创建一个存储生成的字段 (MySQL)</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="虚拟生成"><a href="#虚拟生成" class="headerlink" title="虚拟生成"></a>虚拟生成</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-&gt;virtualAs($expression) <span class="comment">// 创建一个虚拟生成的字段 (MySQL)</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="序列生成"><a href="#序列生成" class="headerlink" title="序列生成"></a>序列生成</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-&gt;generatedAs($expression) <span class="comment">// 使用指定的序列生成标识列（PostgreSQL）</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="序列值优先"><a href="#序列值优先" class="headerlink" title="序列值优先"></a>序列值优先</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-&gt;always() <span class="comment">// 定义序列值优先于标识列的输入 (PostgreSQL)</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="修改字段"><a href="#修改字段" class="headerlink" title="修改字段"></a>修改字段</h1><h2 id="TODO-3"><a href="#TODO-3" class="headerlink" title="TODO"></a>TODO</h2>
+    </div>
+
+    
+    
+    
+        
+      
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/javascript/template-strings/" rel="next" title="模板字符串">
+                  <i class="fa fa-chevron-left"></i> 模板字符串
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/javascript/function/" rel="prev" title="ES6 对函数的扩展">
+                  ES6 对函数的扩展 <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#创建迁移"><span class="nav-number">1.</span> <span class="nav-text">创建迁移</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建新表"><span class="nav-number">1.1.</span> <span class="nav-text">创建新表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改旧表"><span class="nav-number">1.2.</span> <span class="nav-text">修改旧表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#指定路径"><span class="nav-number">1.3.</span> <span class="nav-text">指定路径</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#运行迁移"><span class="nav-number">2.</span> <span class="nav-text">运行迁移</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#执行迁移"><span class="nav-number">2.1.</span> <span class="nav-text">执行迁移</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#回滚迁移"><span class="nav-number">2.2.</span> <span class="nav-text">回滚迁移</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#刷新迁移"><span class="nav-number">2.3.</span> <span class="nav-text">刷新迁移</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删除迁移"><span class="nav-number">2.4.</span> <span class="nav-text">删除迁移</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据表"><span class="nav-number">3.</span> <span class="nav-text">数据表</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#TODO"><span class="nav-number">3.1.</span> <span class="nav-text">TODO</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字段类型"><span class="nav-number">4.</span> <span class="nav-text">字段类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ID"><span class="nav-number">4.1.</span> <span class="nav-text">ID</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自增ID"><span class="nav-number">4.1.1.</span> <span class="nav-text">自增ID</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UUID"><span class="nav-number">4.1.2.</span> <span class="nav-text">UUID</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数值"><span class="nav-number">4.2.</span> <span class="nav-text">数值</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#整数"><span class="nav-number">4.2.1.</span> <span class="nav-text">整数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#浮点数"><span class="nav-number">4.2.2.</span> <span class="nav-text">浮点数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符串"><span class="nav-number">4.3.</span> <span class="nav-text">字符串</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#日期时间"><span class="nav-number">4.4.</span> <span class="nav-text">日期时间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BOOLEAN"><span class="nav-number">4.5.</span> <span class="nav-text">BOOLEAN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IP"><span class="nav-number">4.6.</span> <span class="nav-text">IP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MAC"><span class="nav-number">4.7.</span> <span class="nav-text">MAC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JSON"><span class="nav-number">4.8.</span> <span class="nav-text">JSON</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BLOB"><span class="nav-number">4.9.</span> <span class="nav-text">BLOB</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SET"><span class="nav-number">4.10.</span> <span class="nav-text">SET</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ENUM"><span class="nav-number">4.11.</span> <span class="nav-text">ENUM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GEOMETRY"><span class="nav-number">4.12.</span> <span class="nav-text">GEOMETRY</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#POINT"><span class="nav-number">4.13.</span> <span class="nav-text">POINT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#POLYGON"><span class="nav-number">4.14.</span> <span class="nav-text">POLYGON</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#morphs"><span class="nav-number">4.15.</span> <span class="nav-text">morphs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#软删除"><span class="nav-number">4.16.</span> <span class="nav-text">软删除</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#索引字段"><span class="nav-number">5.</span> <span class="nav-text">索引字段</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#主键"><span class="nav-number">5.1.</span> <span class="nav-text">主键</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#唯一索引"><span class="nav-number">5.2.</span> <span class="nav-text">唯一索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#普通索引"><span class="nav-number">5.3.</span> <span class="nav-text">普通索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#空间索引"><span class="nav-number">5.4.</span> <span class="nav-text">空间索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义索引名称"><span class="nav-number">5.5.</span> <span class="nav-text">自定义索引名称</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#索引长度"><span class="nav-number">5.6.</span> <span class="nav-text">索引长度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TODO-1"><span class="nav-number">5.6.1.</span> <span class="nav-text">TODO</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重命名索引"><span class="nav-number">5.7.</span> <span class="nav-text">重命名索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删除索引"><span class="nav-number">5.8.</span> <span class="nav-text">删除索引</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#外键约束"><span class="nav-number">6.</span> <span class="nav-text">外键约束</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#TODO-2"><span class="nav-number">6.1.</span> <span class="nav-text">TODO</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字段修饰符"><span class="nav-number">7.</span> <span class="nav-text">字段修饰符</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#字段位置"><span class="nav-number">7.1.</span> <span class="nav-text">字段位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注释"><span class="nav-number">7.2.</span> <span class="nav-text">注释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#默认值"><span class="nav-number">7.3.</span> <span class="nav-text">默认值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#允许-NULL"><span class="nav-number">7.4.</span> <span class="nav-text">允许 NULL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UNSIGNED"><span class="nav-number">7.5.</span> <span class="nav-text">UNSIGNED</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自增主键"><span class="nav-number">7.6.</span> <span class="nav-text">自增主键</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符集"><span class="nav-number">7.7.</span> <span class="nav-text">字符集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#排序规则"><span class="nav-number">7.8.</span> <span class="nav-text">排序规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CURRENT-TIMESTAMP"><span class="nav-number">7.9.</span> <span class="nav-text">CURRENT_TIMESTAMP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#存储生成"><span class="nav-number">7.10.</span> <span class="nav-text">存储生成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#虚拟生成"><span class="nav-number">7.11.</span> <span class="nav-text">虚拟生成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#序列生成"><span class="nav-number">7.12.</span> <span class="nav-text">序列生成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#序列值优先"><span class="nav-number">7.13.</span> <span class="nav-text">序列值优先</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#修改字段"><span class="nav-number">8.</span> <span class="nav-text">修改字段</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#TODO-3"><span class="nav-number">8.1.</span> <span class="nav-text">TODO</span></a></li></ol></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/static/waixiwai_avatar.jpg"
+      alt="池水">
+  <p class="site-author-name" itemprop="name">池水</p>
+  <div class="site-description" itemprop="description">『希望收藏夹不要再吃灰』</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">77</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3dhaXhpd2Fp" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;waixiwai"><i class="fa fa-fw fa-github"></i>GitHub</span>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+        
+      
+      
+        
+      
+        <span class="exturl" data-url="bWFpbHRvOmlAd2FpeGl3YWkuY29t" title="E-Mail &amp;rarr; mailto:i@waixiwai.com"><i class="fa fa-fw fa-envelope"></i>E-Mail</span>
+      </span>
+    
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    
+  
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">池水</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    
+    <span title="站点总字数">74k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    
+    <span title="站点阅读时长">1:07</span>
+</div>
+  <div class="powered-by">由 <span class="exturl theme-link" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">
+      
+    主题 – <span class="exturl theme-link" data-url="aHR0cHM6Ly9waXNjZXMudGhlbWUtbmV4dC5vcmc=">NexT.Pisces</span> v7.4.2
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+  
+    <span class="post-meta-divider">|</span>
+  
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.1.0/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/velocity-animate@1/velocity.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/velocity-animate@1/velocity.ui.min.js"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.4.2"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
